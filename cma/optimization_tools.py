@@ -286,8 +286,10 @@ class EvalParallel2(object):
         if sys.version[0] == '2':
             if isinstance(fitness_function, type(self.__init__)):
                 warnings.warn(warning_str)
-        jobs = [self.pool.apply_async(fitness_function, (x,) + args)
-                for x in solutions]
+        # jobs = [self.pool.apply_async(fitness_function, (x,) + args)
+        #         for x in solutions]
+        jobs = [self.pool.apply_async(fitness_function, (x,) + (ix,))
+                for ix, x in enumerate(solutions)]
         try:
             return [job.get(timeout) for job in jobs]
         except:
